@@ -7,6 +7,7 @@
   "dependencies": {
     "Newtonsoft.Json": "9.0.1"
   },
+  "testRunner": "xunit",
   "frameworks": {
     "netcoreapp1.0": {
       "dependencies": {
@@ -15,7 +16,11 @@
           "version": "1.0.1"
         }
       },
-      "imports": "dnxcore50"
+      "imports": [
+        "dotnet5.4",
+        "dnxcore50",
+        "portable-net451+win8"
+      ]
     }
   },
   "tools": {
