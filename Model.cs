@@ -7,7 +7,7 @@ using System.Net.Http;
 
 namespace Weather2 {
 // dark sky output
-    public class RootObjectGoogle
+    public class GoogleRO
 {
     public double latitude { get; set; }
     public double longitude { get; set; }
@@ -60,9 +60,9 @@ public class Daily : Hourly
     
 // geo locator output 
 
-public class RootObject
+public class darkSkyRO
 {
-        public Result results { get; set; }
+        public List<Result> results { get; set;}
 }
 public class Result
 {
