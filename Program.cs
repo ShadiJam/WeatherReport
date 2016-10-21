@@ -23,13 +23,17 @@ namespace Weather2 {
             var darkKey = "589b4821461ba16c289f8b67fe662445";
             // sending lat and lng to darkSkyUrl (darkSky API) 
             API darkSkyUrl = new API($"https://api.darksky.net/forecast/{darkKey}/{lat1},{lng1}");
-            // creates variable called data2 and assigns it the value of the weather report being receives from darkSkyUrl (DarkSky API)
+            // creates variable called data2 and assigns it the value of the weather report being received from darkSkyUrl (DarkSky API)
             darkSkyRO data2 = await darkSkyUrl.GetData<darkSkyRO>();
-            // need to figure out how to print the correct info. Currently 
-            // only printing Weather2.CurrentlyWeather2.Daily
-            string currently = data2.currently.ToString();
-            string daily = data2.daily.ToString();
-            Console.WriteLine(currently+" "+daily);
+            // printing results from darkSky API
+            var tempNow = data2.currently.apparentTemperature.ToString();
+            string summary = data2.currently.summary.ToString();
+            string hourly = data2.hourly.summary.ToString();
+            string sunRise = data2.daily.sunriseTime.ToString();
+            string sunSet = data2.daily.sunsetTime.ToString();
+            Console.WriteLine(@"The temperature is currently {tempNow} degrees. 
+            The forecast is {summary} and will be {hourly}. 
+            Sunrise will be at {sunRise} and sunset will be at {sunSet}");
 
     
         }    
