@@ -1,5 +1,18 @@
 Weather Report works with API's from Google Maps Geolocation (GMG) and Dark Sky Weather (DSW).
 
+Using Postman, we choose what information from the respective URLs we want the API to 'GET'. 
+
+GMG Url (https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBRBZtk0JyJrAzmp2i9DklBHhjvKwoI0JE)
+DSW Url (https://api.darksky.net/forecast/d353c94884828ab143c8633437f899aa/37.8267,-122.4233)
+
+For GMG we wanted the latitude and longitude. 
+
+For DSW we wanted the current temperature and weather summary, the forecast for the following eight days, as well as sunrise and sunset times. 
+
+In order to communicate between the program and the APIs we needed to 'translate' the API json files into a structure recognized by C#.
+We did this by generating the results from each Url using json2csharp.com and then creating a "Model" file in the program that shows the structure for each API.
+
+INSTRUCTIONS:
 When run, the console will prompt the user to input their zipcode. Once they press enter 
 the zipcode is sent to GMG and the latitude and longitude of that zip code is returned and sent to DSW. 
 
