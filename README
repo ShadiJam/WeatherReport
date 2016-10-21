@@ -1,0 +1,7 @@
+Weather Report works with API's from Google Maps Geolocation (GMG) and Dark Sky Weather (DSW).
+
+When run, the console will prompt the user to input their zipcode. Once they press enter 
+the zipcode is sent to GMG and the latitude and longitude of that zip code is returned and sent to DSW. 
+
+DSW then returns the weather report for that location and prints it to the console. 
+
