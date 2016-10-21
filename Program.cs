@@ -15,43 +15,24 @@ namespace Weather2 {
             Console.WriteLine("Welcome to the Weather Report! Enter your city and state or your zip code:");
             string addInput = Console.ReadLine();
             API googleUrl = new API($"https://maps.googleapis.com/maps/api/geocode/json?address={addInput}&key=AIzaSyBRBZtk0JyJrAzmp2i9DklBHhjvKwoI0JE");
-            darkSkyRO data = await googleUrl.GetData<darkSkyRO>();
-            Console.WriteLine(data.results.Count());
-            Console.WriteLine(JsonConvert.SerializeObject(data));
+            // creates a variable called data and assigns it the value of the data being received from googleUrl (google API)
+            GoogleRO data = await googleUrl.GetData<GoogleRO>();
+            // pulls data returned from googleUrl (googles API) into two doubles, one for lat, and one for lng.
+            var lat1 = data.results.ElementAt(0).geometry.location.lat;
+            var lng1 = data.results.ElementAt(0).geometry.location.lng;
+            var darkKey = "589b4821461ba16c289f8b67fe662445";
+            // sending lat and lng to darkSkyUrl (darkSky API) 
+            API darkSkyUrl = new API($"https://api.darksky.net/forecast/{darkKey}/{lat1},{lng1}");
+            // creates variable called data2 and assigns it the value of the weather report being receives from darkSkyUrl (DarkSky API)
+            darkSkyRO data2 = await darkSkyUrl.GetData<darkSkyRO>();
+            // need to figure out how to print the correct info. Currently 
+            // only printing Weather2.CurrentlyWeather2.Daily
+            string currently = data2.currently.ToString();
+            string daily = data2.daily.ToString();
+            Console.WriteLine(currently+" "+daily);
 
-            //at this point we've pulled the lat and lng from google api and need to send it to dark sky to get the weather
-         //   var latLng= String.Format("{0},{1}", lat, lng);
-         //   var darkSkyKey = "589b4821461ba16c289f8b67fe662445";
-         //   var darkSkyUrl = String.Format("https://api.darksky.net/forecast/d353c94884828ab143c8633437f899aa/{1},{2}", darkSkyKey, m.lat, m.lng);
-        }
+    
+        }    
     }
-}
+}     
 
-/*
-        
-            
-            string reply = newUser.DownloadString(googleUrl);
-            Location m = JsonConvert.DeserializeObject<Location>(reply);
-            var newUser = new WebClient();
-           
-
-            
-           
-            
-        }
-
-     
-        // ask client for address/zip/city and state - DONE
-        // take input and send that to geo locator which locates lng and lat - DONE
-        // take return from geolocator and input into darksky - 
-        // return forecast from darksky that includes the following: 
-        //      currently, 
-        //      daily for next 8 days, 
-        //      sunrise and sunsetTime
-        //      
-
-        
-        }
-    }
-}
-*/
