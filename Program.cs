@@ -5,38 +5,35 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Net.Http;
 
-namespace Weather2 {
-    class Program {
-        public static void Main(){
-            prompt().Wait();
-        }
+namespace Weather2
+{
+    class Program
+    {
+        private HttpClient _http = new HttpClient();
 
-        public static async Task prompt(){
+        public static async Task Main()
+        {
+            var config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "keys.json")));
             Console.WriteLine("Welcome to the Weather Report! Enter your city and state or your zip code:");
             string addInput = Console.ReadLine();
-            API googleUrl = new API($"https://maps.googleapis.com/maps/api/geocode/json?address={addInput}&key=AIzaSyBRBZtk0JyJrAzmp2i9DklBHhjvKwoI0JE");
-            // creates a variable called data and assigns it the value of the data being received from googleUrl (google API)
-            GoogleRO data = await googleUrl.GetData<GoogleRO>();
+
+            var response = await _http.GetAsync($"https://maps.googleapis.com/maps/api/geocode/json?address={addInput}&key={config.GoogleKey}");
+            var jgoogle = JObject.Parse(await response.Content.ReadAsStringAsync());
+
             // pulls data returned from googleUrl (googles API) into two doubles, one for lat, and one for lng.
-            var lat1 = data.results.ElementAt(0).geometry.location.lat;
-            var lng1 = data.results.ElementAt(0).geometry.location.lng;
-            var darkKey = "589b4821461ba16c289f8b67fe662445";
+            var lat1 = jgoogle["results"]["geometry"]["location"]["lat"].ToString();
+            var lng1 = jgoogle["results"]["geometry"]["location"]["lng"].ToString();
             // sending lat and lng to darkSkyUrl (darkSky API) 
-            API darkSkyUrl = new API($"https://api.darksky.net/forecast/{darkKey}/{lat1},{lng1}");
-            // creates variable called data2 and assigns it the value of the weather report being received from darkSkyUrl (DarkSky API)
-            darkSkyRO data2 = await darkSkyUrl.GetData<darkSkyRO>();
+            var darkdata = await _http.GetAsync($"https://api.darksky.net/forecast/{config.DarkKey}/{lat1},{lng1}");
             // printing results from darkSky API
-            var tempNow = data2.currently.apparentTemperature.ToString();
-            string summary = data2.currently.summary.ToString();
-            string hourly = data2.hourly.summary.ToString();
-            string sunRise = data2.daily.sunriseTime.ToString();
-            string sunSet = data2.daily.sunsetTime.ToString();
-            Console.WriteLine(@"The temperature is currently {tempNow} degrees. 
-            The forecast is {summary} and will be {hourly}. 
-            Sunrise will be at {sunRise} and sunset will be at {sunSet}");
-
-    
-        }    
+            var tempNow = data2.Currently.ApparentTemperature.ToString();
+            string summary = data2.Currently.Summary.ToString();
+            string hourly = data2.Hourly.Summary.ToString();
+            string sunRise = data2.Daily.SunriseTime.ToString();
+            string sunSet = data2.Daily.SunsetTime.ToString();
+            Console.WriteLine(string.Format(@"The temperature is currently {0} degrees. 
+            The forecast is {1} and will be {2}. 
+            Sunrise will be at {3} and sunset will be at {4}", tempNow, summary, hourly, sunRise, sunSet));
+        }
     }
-}     
-
+}
